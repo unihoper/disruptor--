@@ -35,7 +35,8 @@ namespace disruptor {
 // Coordinator for claiming sequences for access to a data structures while
 // tracking dependent {@link Sequence}s
 template <typename T, size_t N = kDefaultRingBufferSize,
-          typename C = kDefaultClaimStrategy, typename W = kDefaultWaitStrategy>
+          typename C = kDefaultClaimStrategyTemplate<N>,
+          typename W = kDefaultWaitStrategy>
 class Sequencer {
  public:
   // Construct a Sequencer with the selected strategies.

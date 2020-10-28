@@ -62,8 +62,9 @@ class ClaimStrategy {
 
 template <size_t N>
 class SingleThreadedStrategy;
-using kDefaultClaimStrategy = SingleThreadedStrategy<kDefaultRingBufferSize>;
-
+//this is a dangerous practice, may result into different knowledge of N being used as template argument in sequencer
+//using kDefaultClaimStrategy = SingleThreadedStrategy<kDefaultRingBufferSize>;
+template <size_t N> using kDefaultClaimStrategyTemplate = SingleThreadedStrategy<N>;
 // Optimised strategy can be used when there is a single publisher thread.
 template <size_t N = kDefaultRingBufferSize>
 class SingleThreadedStrategy {
