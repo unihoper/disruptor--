@@ -39,6 +39,7 @@ template <typename T, size_t N = kDefaultRingBufferSize,
 class Sequencer {
  public:
   // Construct a Sequencer with the selected strategies.
+  Sequencer() : ring_buffer_() {} //default constructor for quicker initialization
   Sequencer(std::array<T, N> events) : ring_buffer_(events) {}
 
   // Set the sequences that will gate publishers to prevent the buffer
@@ -54,8 +55,8 @@ class Sequencer {
   //
   // @param sequences_to_track this barrier will track.
   // @return the barrier gated as required.
-  SequenceBarrier<W> NewBarrier(const std::vector<Sequence*>& dependents) {
-    return SequenceBarrier<W>(cursor_, dependents);
+  SequenceBarrier<W>* NewBarrier(const std::vector<Sequence*>& dependents) {
+    return new SequenceBarrier<W>(cursor_, dependents);
   }
 
   // Get the value of the cursor indicating the published sequence.

@@ -48,6 +48,7 @@ class RingBuffer {
   // entries in the ring.
   // @param wait_strategy_option waiting strategy employed by
   // processors_to_track waiting in entries becoming available.
+  RingBuffer() : events_() {} //adding default constructor to allow quicker initialization
   RingBuffer(const std::array<T, N>& events) : events_(events) {}
 
   static_assert(((N > 0) && ((N & (~N + 1)) == N)),
