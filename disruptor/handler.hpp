@@ -11,6 +11,7 @@ class Handler {
 public:
     using DATA_TYPE = T;
     virtual void process(const DATA_TYPE* pMD) noexcept {}
+    virtual ~Handler() {}
 };
 
 /** Sequential Handler */
@@ -21,6 +22,7 @@ public:
     using BASE_HANDLER_TYPE = Handler<T>;
     SequentialHandler(){}
     SequentialHandler(const std::vector<BASE_HANDLER_TYPE*>& chain_): chain(chain_) {}
+    virtual ~SequentialHandler() {}
     virtual BASE_HANDLER_TYPE* addHandler(BASE_HANDLER_TYPE* rcv) { chain.push_back(rcv); return rcv; }
     virtual BASE_HANDLER_TYPE* removeHandler(BASE_HANDLER_TYPE* rcv) {
         for(auto it = chain.begin(); it != chain.end(); ++it) {
@@ -61,8 +63,8 @@ protected:
 
 public:
     AsyncHandler(BASE_HANDLER_TYPE* handler_)
-    : handler(handler_), sequencer(nullptr)
-    , stopFlag(true), stopCheck(nullptr), work_thread(nullptr)
+    : handler(handler_), stopFlag(true), stopCheck(nullptr)
+    , work_thread(nullptr), sequencer(nullptr)
     {
         sequence = new disruptor::Sequence();
         handler = handler_;
@@ -101,6 +103,7 @@ public:
         stopFlag = false;
         work_thread = new std::thread([this, sequencer_] { this->doWork(sequencer_); });
         sequencer = sequencer_;
+        return work_thread;
     }
     std::thread* getWorkThread() noexcept { return work_thread; }
 
@@ -202,7 +205,7 @@ public:
     using STOP_CHECK_FUNCTION_TYPE = std::function<bool(const DATA_TYPE*)>;
 
     CompositeHandler(){}
-    ~CompositeHandler(){
+    virtual ~CompositeHandler(){
         for(auto& rcv : derived) {
             if (rcv) delete rcv;
         }

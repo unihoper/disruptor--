@@ -29,8 +29,8 @@
 #include <memory>
 #include <vector>
 
-#include "disruptor/wait_strategy.h"
-#include "disruptor/sequence.h"
+#include "wait_strategy.h"
+#include "sequence.h"
 
 namespace disruptor {
 

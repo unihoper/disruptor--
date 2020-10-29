@@ -35,7 +35,7 @@
 
 #include <atomic>
 
-#include "disruptor/utils.h"
+#include "utils.h"
 
 namespace disruptor {
 

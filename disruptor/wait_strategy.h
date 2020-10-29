@@ -33,7 +33,7 @@
 #include <condition_variable>
 #include <vector>
 
-#include "disruptor/sequence.h"
+#include "sequence.h"
 
 namespace disruptor {
 

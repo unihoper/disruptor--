@@ -28,8 +28,8 @@
 
 #include <thread>
 
-#include "disruptor/sequence.h"
-#include "disruptor/ring_buffer.h"
+#include "sequence.h"
+#include "ring_buffer.h"
 
 namespace disruptor {
 
