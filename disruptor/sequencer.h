@@ -35,12 +35,14 @@ namespace disruptor {
 // Coordinator for claiming sequences for access to a data structures while
 // tracking dependent {@link Sequence}s
 template <typename T, size_t N = kDefaultRingBufferSize,
-          typename C = kDefaultClaimStrategyTemplate<N>,
-          typename W = kDefaultWaitStrategy>
+        typename C = kDefaultClaimStrategyTemplate<N>,
+        typename W = kDefaultWaitStrategy>
 class Sequencer {
  public:
+  //added for quicker initialization with no pre-generated events
+  Sequencer() : ring_buffer_() {}
+
   // Construct a Sequencer with the selected strategies.
-  Sequencer() : ring_buffer_() {} //default constructor for quicker initialization
   Sequencer(std::array<T, N> events) : ring_buffer_(events) {}
 
   // Set the sequences that will gate publishers to prevent the buffer
@@ -87,7 +89,8 @@ class Sequencer {
   // @param sequence to be published.
   void Publish(const int64_t& sequence, size_t delta = 1) {
     claim_strategy_.SynchronizePublishing(sequence, cursor_, delta);
-    const int64_t new_cursor = cursor_.IncrementAndGet(delta);
+    //const int64_t new_cursor = 
+    cursor_.IncrementAndGet(delta);
     wait_strategy_.SignalAllWhenBlocking();
   }
 
